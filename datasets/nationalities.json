@@ -1,0 +1,139 @@
+{
+    "nationalities": [
+        "british", "indian", "american", "german", "polish", "pakistani", "italian", "romanian", "french", "chinese", "irish", "japanese", "spanish", "filipino", "dutch", "nigerian", "south korean", "taiwanese", "hong konger","korean", "swiss", "danish", "austrian","belgian", "luxembourger", "portugese",
+        "norwegian", "swedish", "finnish", "icelandic", "denmark", "lithuanian", "estonian", "latvian", "hungarian", "bulgarian", "czech", "albanian", "slovak", "slovenian", "algerian", "croatian", "serbian", "macedonian", "georgian", "citizen of bosnia and herzegovina", "kosovan", "belarusian",
+        "cypriot", "greek", "russian", "ukrainian", "uzbek", "moldovan", "turkmen","kazakh","kyrgyz", "australian",
+        "nepalese", "sri lankan", "singaporean","bangladeshi", "malaysian", "fijian", "thai", "indonesian", "burmese", "vietnamese",
+        "turkish", "iraqi", "iranian", "israeli", "yemeni", "syrian", "afghan", "palestinian", "kuwaiti", "armenian", "bahraini", "lebanese", "saudi arabian", "azerbaijani", "emirati","omani","qatari","jordanian","maltese",
+        "egyptian", "moroccan", "tunisian","libyan", "cameroonian", "ghanian", "ugandan", "nigerien", "kenyan", "gambian", "ivorian", "senegalese", "eritrean", "sierra leonean", "congolese", "somali", "sudanese", "ethiopian","angolan",
+        "zimbabwean", "south african", "zambian", "mauritian", "malawian", "tanzanian", "botswanan", "namibian","citizen of seychelles",
+        "canadian", "new zealander","mexican", "dominican", "trinidadian", "barbadian", "kittitian", "st lucian","jamaican","british virgin islander", "costa rican","grenadian","panamanian", "cuban",
+        "brazilian", "colombian", "argentinian", "peruvian", "venezuelan", "ecuadorean","chilean", "guyanese","bolivian","uruguayan"
+    ],
+    "nationality_groups": {
+        "african": [
+            "nigerian",
+            "south african",
+            "namibian",
+            "zimbabwean",
+            "ghanian",
+            "egyptian",
+            "kenyan",
+            "mauritian",
+            "ugandan",
+            "cameroonian",
+            "zambian",
+            "congolese",
+            "sierra leonean",
+            "sudanese",
+            "tanzanian",
+            "somali",
+            "malawian",
+            "gambian"
+        ],
+        "angloAmerican": [
+            "british",
+            "irish",
+            "american",
+            "australian",
+            "canadian",
+            "new zealander",
+            "maltese",
+            "british virgin islander"
+        ],
+        "eastAsian": [
+            "chinese",
+            "malaysian",
+            "japanese",
+            "vietnamese",
+            "thai",
+            "korean",
+            "south korean",
+            "hong konger",
+            "taiwanese",
+            "indonesian"
+        ],
+        "european": [
+            "polish",
+            "romanian",
+            "italian",
+            "french",
+            "german",
+            "bulgarian",
+            "lithuanian",
+            "dutch",
+            "hungarian",
+            "greek",
+            "latvian",
+            "russian",
+            "belgian",
+            "ukrainian",
+            "slovak",
+            "czech",
+            "swiss",
+            "austrian",
+            "cypriot",
+            "albanian",
+            "estonian",
+            "croatian",
+            "slovenian",
+            "belarusian",
+            "serbian",
+            "moldovan",
+            "kosovan",
+            "luxembourger"
+        ],
+        "hispanic": [
+            "filipino",
+            "spanish",
+            "portugese",
+            "brazilian",
+            "mexican",
+            "colombian",
+            "venezuelan",
+            "argentine"
+        ],
+        "Jewish": [
+            "israeli"
+        ],
+        "arabic": [
+            "pakistani",
+            "turkish",
+            "bangladeshi",
+            "iranian",
+            "afghan",
+            "iraqi",
+            "moroccan",
+            "syrian",
+            "lebanese",
+            "saudi arabian",
+            "algerian",
+            "jordanian",
+            "uzbek",
+            "libyan",
+            "kazakh",
+            "azerbaijani",
+            "georgian",
+            "kuwaiti",
+            "tunisian"
+        ],
+        "None": [
+            "sri lankan",
+            "jamaican",
+            "trinidadian"
+        ],
+        "scandinavian": [
+            "swedish",
+            "denmark",
+            "danish",
+            "norwegian",
+            "finnish",
+            "icelandic"
+        ],
+        "southAsian": [
+            "indian",
+            "singaporean",
+            "nepalese"
+        ]
+    }
+}
