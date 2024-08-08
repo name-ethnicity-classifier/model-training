@@ -1,4 +1,11 @@
 .fuse_*
 datasets/raw_dataset.pickle
 
-!/**/.gitkeep
+datasets/preprocessed_datasets/*
+!datasets/preprocessed_datasets/.gitkeep
+
+logs/*
+!logs/.gitkeep
+
+outputs/*
+!logs/.gitkeep
