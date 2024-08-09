@@ -28,12 +28,13 @@ def validate_accuracy(y_true: list, y_pred: list, threshold: float) -> float:
     return round((100 * correct_in_batch / len(y_true)), 5)
 
 
-def create_confusion_matrix(y_true: list, y_pred: list, classes: list=None, save: str=None) -> None:
+def create_confusion_matrix(y_true: list, y_pred: list, classes: list=None, save_path: str=None) -> None:
     """ creates and plots a confusion matrix given two list (targets and predictions)
 
     :param list y_true: list of all targets (as indices of one-hot enc. vector)
     :param list y_pred: list of all predictions (as indices of one-hot enc. vector)
     :param list classes: list of class names
+    :param str save_path: Path to folder in which to store the resulting plot image
     """
 
     amount_classes = len(classes)
@@ -57,12 +58,11 @@ def create_confusion_matrix(y_true: list, y_pred: list, classes: list=None, save
     plt.setp(ax.get_xticklabels(), rotation=45, ha="left", rotation_mode="anchor")
     plt.setp(ax.get_yticklabels(), rotation=45, ha="right", rotation_mode="anchor")
 
-    if save != None:
+    if save_path:
         try:
-            plt.savefig(save + "/confusion_matrix.png")
+            plt.savefig(f"{save_path}/confusion_matrix.png")
         except Exception as e:
-            print("\ncouldn't save confusion matrix!")
-            print(e)
+            print(f"\nCouldn't save confusion matrix! Error:\n{str(e)}")
 
     plt.show()
 
@@ -171,7 +171,7 @@ def f1_score(precisions: list, recalls: list) -> list:
     return f1_scores
 
 
-def score_plot(precisions: list, recalls: list, f1_scores: list, classes: dict={}, save: str=None) -> None:
+def score_plot(precisions: list, recalls: list, f1_scores: list, classes: dict={}, save_path: str=None) -> None:
     """ plots the precision-, recall- and F!-score for every class
 
     :param list precisions: list containing the precision of each class
@@ -195,12 +195,11 @@ def score_plot(precisions: list, recalls: list, f1_scores: list, classes: dict={
     axs[2].set_xticklabels(classes, rotation=75)
     axs[2].title.set_text("f1 scores")
 
-    if save != None:
+    if save_path:
         try:
-            plt.savefig(save + "/scores.png")
+            plt.savefig(f"{save_path}/scores.png")
         except Exception as e:
-            print("\ncouldn't save score plots!")
-            print(e)
+            print(f"\nCouldn't save score plots! Error:\n{str(e)}")
 
     plt.show()
 

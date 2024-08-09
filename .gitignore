@@ -8,4 +8,8 @@ logs/*
 !logs/.gitkeep
 
 outputs/*
-!logs/.gitkeep
+!outputs/.gitkeep
+
+wandb/
+
+**/__pycache__/

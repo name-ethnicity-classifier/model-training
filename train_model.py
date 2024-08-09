@@ -1,13 +1,13 @@
 
-from train_setup import TrainSetup
+from src.train_setup import TrainSetup
 
 
 model_config = {
     # name of the model/experiment in general (choose descriptive name, the .pt file will have the same name and store the parameters of the model)
-    "model-name": "eurpean-african-muslim",
+    "model-name": "spanish_german_else",
 
     # path to the dataset folder (must contain "matrix_name_list.pickle" and "nationality_classes.json" and be stored in "../datasets/preprocessed_datasets/")
-    "dataset-name": "eurpean-african-muslim",
+    "dataset-name": "spanish_german_else",
     
     # percentage of the test and validation set (separately)
     "test-size": 0.1,
@@ -19,19 +19,19 @@ model_config = {
     "loss-function": "NLLLoss",
 
     # amount of epochs
-    "epochs": 12,
+    "epochs": 2,
 
     # batch size
-    "batch-size": 512,
+    "batch-size": 1024,
 
     # cnn parameters (idx 0: kernel size, idx 1: list of feature map dimension)
-    "cnn-parameters": [3, 256],
+    "cnn-parameters": [3, 24],  # default = 256
     
     # hidden size of the LSTM
-    "hidden-size": 200, 
+    "hidden-size": 64,    # default = 200
 
     # amount of layers inside the LSTM
-    "rnn-layers": 2,
+    "rnn-layers": 1,    # default = 2
 
     # learning-rate parameters (idx 0: current lr, idx 1: decay rate, idx 2: decay intervall in iterations), 
     # change current lr (idx 0) when resuming the training to the learning rate of the last checkpoint (last two values don't have to be changed)
@@ -47,7 +47,10 @@ model_config = {
     "augmentation": 0.0,
 
     # when resume is true: replace the first element of "lr-schedule" (the current lr) with the learning rate of the last checkpoint
-    "resume": False
+    "resume": True,
+
+    "wandb-project": "n2e",
+    "wandb-entity": "theodorp"
 }
 
 
@@ -76,5 +79,5 @@ model_config = {
 
 # train and test
 train_setup = TrainSetup(model_config)
-# train_setup.train()
+train_setup.train()
 train_setup.test(print_amount=None, plot_confusion_matrix=True, plot_scores=False, reinitialize=False)

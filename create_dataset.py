@@ -187,15 +187,15 @@ if __name__ == "__main__":
     raw_dataset_path = "datasets/raw_dataset.pickle"
 
     # Option 1: Create a dataset based on selected nationalities
-    """preprocess_nationalities(
-        dataset_name="10_nationalities_and_else_2",
-        nationalities=["british", "german", "chinese", "dutch", "japanese", "indian", "spanish", "italian", "russian", "else"],
-        raw_dataset_path=raw_dataset_path
-    )"""
-
-    # Option 2: Create a dataset based on selected nationality groups
-    preprocess_groups(
-        dataset_name="afr_eur_sca_asi_3",
-        groups=["african", "european", "scandinavian", "eastAsian"],
+    preprocess_nationalities(
+        dataset_name="spanish_german_else",
+        nationalities=["spanish", "german", "else"],
         raw_dataset_path=raw_dataset_path
     )
+
+    # Option 2: Create a dataset based on selected nationality groups
+    """preprocess_groups(
+        dataset_name="afr_eur_sca_asi",
+        groups=["african", "european", "scandinavian", "eastAsian"],
+        raw_dataset_path=raw_dataset_path
+    )"""

@@ -24,7 +24,7 @@ class ConvLSTM(nn.Module):
         
         self.lstm = nn.LSTM(input_size=self.cnn_out_dim, hidden_size=self.hidden_size, num_layers=self.layers, batch_first=True)
         
-        self.dropout = nn.Dropout2d(p=self.dropout_chance)
+        self.dropout = nn.Dropout(p=self.dropout_chance)
         self.linear1 = nn.Linear(self.hidden_size, class_amount)
         self.logSoftmax = nn.LogSoftmax(dim=1)
 

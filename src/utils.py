@@ -1,22 +1,16 @@
-""" file for small helper functions """
-
 import string
-from functools import partial
 import numpy as np
 import torch
 import torch.utils.data
 import torch.nn as nn
-from torch.nn.utils.rnn import pad_sequence, pack_padded_sequence
-import pickle5 as pickle
+from torch.nn.utils.rnn import pad_sequence
+import pickle
 from termcolor import colored
-import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
 import pandas as pd
-import time
 import json
 import random
 
-from nameEthnicityDataset import NameEthnicityDataset
+from src.nameEthnicityDataset import NameEthnicityDataset
 
 torch.manual_seed(0)
 random.seed(0)
@@ -30,8 +24,6 @@ def custom_collate(batch):
     :param batch: three batches -> non-padded sample-batch, target-batch, non-padded sample-batch (again)
     :return torch.Tensor: padded sample-batch, target-batch, non-padded sample-batch
     """
-
-    batch_size = len(batch)
 
     sample_batch, target_batch, non_padded_batch = [], [], []
     for sample, target, non_padded_sample in batch:
@@ -49,8 +41,14 @@ def custom_collate(batch):
     return padded_batch, torch.cat(target_batch, dim=0).reshape(len(sample_batch), target_batch[0].size(0)), non_padded_batch
 
 
-def create_dataloader(dataset_path: str="", test_size: float=0.01, val_size: float=0.01, batch_size: int=32, class_amount: int=10, \
-                                                                            augmentation: float=0.0):
+def create_dataloader(
+        dataset_path: str,
+        test_size: float=0.01,
+        val_size: float=0.01,
+        batch_size: int=32,
+        class_amount: int=10,
+        augmentation: float=0.0
+    ):
     """ create three dataloader (train, test, validation)
 
     :param str dataset_path: path to dataset
@@ -61,7 +59,7 @@ def create_dataloader(dataset_path: str="", test_size: float=0.01, val_size: flo
 
     with open(dataset_path, "rb") as f:
         dataset = pickle.load(f)
-    print(len(dataset))
+
     test_size = int(np.round(len(dataset)*test_size))
     val_size = int(np.round(len(dataset)*val_size))
 
@@ -97,7 +95,15 @@ def create_dataloader(dataset_path: str="", test_size: float=0.01, val_size: flo
     return train_dataloader, val_dataloader, test_dataloader
 
 
-def show_progress(epochs: int, epoch: int, train_loss: float, train_accuracy: float, val_loss: float, val_accuracy: float, colored: bool=True):
+def show_progress(
+        epochs: int,
+        epoch: int,
+        train_loss: float,
+        train_accuracy: float,
+        val_loss: float,
+        val_accuracy: float,
+        color: bool=False
+    ):
     """ print training stats
     
     :param int epochs: amount of total epochs
@@ -106,7 +112,7 @@ def show_progress(epochs: int, epoch: int, train_loss: float, train_accuracy: fl
     :param float val_loss/val_accuracy: validation accuracy/loss
     :return None
     """
-    if colored:
+    if color:
         epochs = colored(epoch, "cyan", attrs=["bold"]) + colored("/", "cyan", attrs=["bold"]) + colored(epochs, "cyan", attrs=["bold"])
         train_accuracy = colored(round(train_accuracy, 4), "cyan", attrs=["bold"]) + colored("%", "cyan", attrs=["bold"])
         train_loss = colored(round(train_loss, 6), "cyan", attrs=["bold"])

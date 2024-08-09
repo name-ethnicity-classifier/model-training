@@ -6,36 +6,34 @@ import torch
 
 
 class ExperimentManager:
-    def __init__(self, experiment_name: str="new-experiment", continue_: bool=False):
+    def __init__(self, log_path: str = "./logs", continue_: bool=False):
         """ init experiment logger
 
         :param str directory: path to the directory in which to manage create the 'x-manager' folder (contains the experiments)
+        :param str log_path: path in which to store the logs
         :param bool continue_: set to 'true' if the user wants to continue the training after interrupting,
             if set to 'false' all logged training information in 'train-stats.json' will be deleted when training again
         """
 
-        self.experiment_name = experiment_name
         self.continue_ = continue_
 
-        # xman-folder
-        self.parent_directory = "../logs"
         # experiment-folder
-        self.experiment_directory = f"{self.parent_directory}/{self.experiment_name}"
+        self.log_path = log_path
 
         # create x-manager folder if first usage
-        if not os.path.exists(self.parent_directory):
-            os.mkdir(self.parent_directory)
+        if not os.path.exists(self.log_path):
+            os.mkdir(self.log_path)
 
         # number of current experiments in xman-folder
-        self.total_experiments = len(os.listdir(self.parent_directory))
+        self.total_experiments = len(os.listdir(self.log_path))
 
-        self.file_ = f"{self.experiment_directory}/train_stats.json"
-        self.model = f"{self.experiment_directory}/model.pt"
+        self.file_ = f"{self.log_path}/train_stats.json"
+        self.model = f"{self.log_path}/model.pt"
 
         # if there is no experiment with that given name, create new one
-        if not os.path.exists(self.experiment_directory):
+        if not os.path.exists(self.log_path):
             # create experiment folder
-            os.mkdir(self.experiment_directory)
+            os.mkdir(self.log_path)
             # create training-stats json file
             open(self.file_, "w+").close()
             # create pytorch-model file
@@ -154,6 +152,6 @@ class ExperimentManager:
         axs[1].legend()
 
         if save:
-            plt.savefig(f"{self.experiment_directory}/history.png")
+            plt.savefig(f"{self.log_path}/history.png")
 
         plt.show()

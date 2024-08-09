@@ -111,7 +111,7 @@ class NameEthnicityDataset(torch.utils.data.Dataset):
         int_name = [e + 1 for e in sample]
         target = self._preprocess_targets(target, one_hot=False)
 
-        augmentation_chance = self.augmentation#self.augmentation_list[target[0]]
+        augmentation_chance = self.augmentation
         if augmentation_chance > 0.0:
             int_name = self._name_switch(int_name, target, chance=augmentation_chance)
         
