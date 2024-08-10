@@ -13,3 +13,5 @@ outputs/*
 wandb/
 
 **/__pycache__/
+
+.empty/

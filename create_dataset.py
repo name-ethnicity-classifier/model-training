@@ -9,11 +9,8 @@ random_seed = 123
 random.seed(random_seed)
 
 
-with open("datasets/nationalities.json", "r") as f:
-    nationality_data = json.load(f)
-
-ALL_NATIONALITIES = nationality_data["nationalities"]
-NATIONALITY_GROUP_TABLE = nationality_data["nationality_groups"]
+RAW_DATASET_PATH = "./datasets/raw_dataset.pickle"
+NATIONALITY_DATA_PATH = "./datasets/nationalities.json"
 
 
 def get_matrix_from_name(name: str, abc_dict: list):
@@ -21,6 +18,7 @@ def get_matrix_from_name(name: str, abc_dict: list):
     for letter in name:
         matrix.append(abc_dict[letter])
     return matrix
+
 
 def get_name_from_matrix(matrix: list, abc_list: list):
     name = ""
@@ -30,11 +28,13 @@ def get_name_from_matrix(matrix: list, abc_list: list):
         name += letter
     return name
 
+
 def handle_clusters(nationality: str, dict_clusters: dict):
     for key in dict_clusters:
         if nationality in dict_clusters[key]:
             return key
     return "other"
+
 
 def max_per_cluster(cluster_dict: dict, amount_names_country: dict):
     max_per_cluster = {}
@@ -52,10 +52,21 @@ def max_per_cluster(cluster_dict: dict, amount_names_country: dict):
 
     return max_per_cluster
 
-def preprocess_nationalities(dataset_name: str, nationalities: list, raw_dataset_path: str):
-    # Load raw dataset
-    with open(raw_dataset_path, "rb") as o:
-        dict_chosen_names = pickle.load(o)
+
+def load_dataset() -> tuple[list, dict]:
+    with open(RAW_DATASET_PATH, "rb") as o:
+        raw_dataset = pickle.load(o)
+
+    with open(NATIONALITY_DATA_PATH, "r") as f:
+        all_nationalities = json.load(f)
+
+    return raw_dataset, all_nationalities
+
+
+def preprocess_nationalities(dataset_name: str, nationalities: list):
+    # Load raw dataset and nationality lists
+    entire_dataset, nationality_data = load_dataset()
+    all_nationalities = nationality_data["nationalities"]
 
     # Set minimum names per country
     minimum_per_country = 1
@@ -64,12 +75,12 @@ def preprocess_nationalities(dataset_name: str, nationalities: list, raw_dataset
     abc_dict = {char: idx for idx, char in enumerate(string.ascii_lowercase + " -")}
 
     # Filter countries with fewer names than the minimum
-    amount_names_country = {key: len(names) for key, names in dict_chosen_names.items() if len(names) > minimum_per_country}
-    dict_chosen_names = {key: dict_chosen_names[key] for key in amount_names_country}
+    amount_names_country = {key: len(names) for key, names in entire_dataset.items() if len(names) > minimum_per_country}
+    entire_dataset = {key: entire_dataset[key] for key in amount_names_country}
 
     # Initialize chosen nationalities and handle the "else" category
     chosen_nationalities_dict = {nat: [nat] for nat in nationalities if nat != "else"}
-    available_nationalities = list(set(ALL_NATIONALITIES) - set(nationalities))
+    available_nationalities = list(set(all_nationalities) - set(nationalities))
 
     if "else" in nationalities:
         chosen_nationalities_dict["else"] = available_nationalities
@@ -80,7 +91,7 @@ def preprocess_nationalities(dataset_name: str, nationalities: list, raw_dataset
     nationality_to_number_dict = {}
     number = 0
 
-    for country, names in dict_chosen_names.items():
+    for country, names in entire_dataset.items():
         max_nat = max_per_cluster_dict.get(country, 0)
         random.shuffle(names)
         
@@ -126,28 +137,28 @@ def preprocess_nationalities(dataset_name: str, nationalities: list, raw_dataset
         json.dump(country_names, f, indent=4)
 
 
-def preprocess_groups(dataset_name: str, groups: list, raw_dataset_path: str):
-    # Load raw dataset
-    with open(raw_dataset_path, "rb") as o:
-        dict_chosen_names = pickle.load(o)
+def preprocess_groups(dataset_name: str, groups: list):
+    # Load raw dataset and nationality lists
+    entire_dataset, nationality_data = load_dataset()
+    all_nationalities, nationality_group_table = nationality_data["nationalities"], nationality_data["nationality_groups"]
 
     # Create mapping for letters to indices
     abc_dict = {char: idx for idx, char in enumerate(string.ascii_lowercase + " -")}
     
     # Filter and prepare the nationalities based on the provided groups
-    nationalities = [nation for group in groups for nation in NATIONALITY_GROUP_TABLE.get(group, [])]
+    nationalities = [nation for group in groups for nation in nationality_group_table.get(group, [])]
 
     # Include the "else" group if specified
     if "else" in groups:
-        else_group = list(set(ALL_NATIONALITIES) - set(nationalities))
+        else_group = list(set(all_nationalities) - set(nationalities))
         nationalities.append("else")
     else:
         else_group = []
 
     group_names = [[] for _ in range(len(groups))]
 
-    for country, names in dict_chosen_names.items():
-        group = handle_clusters(country, NATIONALITY_GROUP_TABLE)
+    for country, names in entire_dataset.items():
+        group = handle_clusters(country, nationality_group_table)
         if group in groups or country in else_group:
             class_ = groups.index(group) if group in groups else groups.index("else")
             for name in names:
@@ -183,19 +194,46 @@ def preprocess_groups(dataset_name: str, groups: list, raw_dataset_path: str):
         json.dump(groups, f, indent=4)
 
 
+def create_dataset(dataset_name: str, classes: list[str], group_level: bool = False):
+    if group_level:
+        print(f"Creating dataset using the following nationality groups: {classes}.")
+        preprocess_groups(
+            dataset_name=dataset_name,
+            groups=classes,
+        )
+    else:
+        print(f"Creating dataset using the following nationalities: {classes}.")
+        preprocess_nationalities(
+            dataset_name=dataset_name,
+            nationalities=classes,
+        )
+
+    print(f"Saved dataset at ./datasets/preprocessed_datasets/{dataset_name}/")
+
+
 if __name__ == "__main__":
-    raw_dataset_path = "datasets/raw_dataset.pickle"
+    import argparse
 
-    # Option 1: Create a dataset based on selected nationalities
-    preprocess_nationalities(
-        dataset_name="spanish_german_else",
-        nationalities=["spanish", "german", "else"],
-        raw_dataset_path=raw_dataset_path
+    # Default parameters, change these if you don't want to use the CLI flags
+    dataset_name = "german_spanish_else"
+    classes = ["german", "spanish", "else"]
+    group_level = False
+
+    # Example for using nationality groups instead (group_level must be true)
+    # dataset_name = "african_european_eastasian"
+    # classes = ["african", "european", "eastAsian"]
+    # group_level = True
+
+    parser = argparse.ArgumentParser(description="Create a preprocessed dataset from the raw dataset by selecting nationalities or groups.")
+    
+    parser.add_argument("--name", type=str, default=dataset_name, help="Name of the output dataset.")
+    parser.add_argument("--classes", nargs="+", default=classes, type=str, help="List of nationalities or groups to include in the dataset.")
+    parser.add_argument("--is_group_level", action="store_true", default=group_level, help="Specify this flag if you want to use nationality groups.")
+
+    args = parser.parse_args()
+
+    create_dataset(
+        dataset_name=args.name,
+        classes=args.classes,
+        group_level=args.is_group_level,
     )
-
-    # Option 2: Create a dataset based on selected nationality groups
-    """preprocess_groups(
-        dataset_name="afr_eur_sca_asi",
-        groups=["african", "european", "scandinavian", "eastAsian"],
-        raw_dataset_path=raw_dataset_path
-    )"""

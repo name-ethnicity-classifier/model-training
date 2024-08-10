@@ -124,9 +124,9 @@ class TrainSetup:
         if confusion_matrix:
             create_confusion_matrix(total_targets, total_predictions, classes=self.classes, save_path=self.log_path)
 
-            wandb.log({"conf_mat": wandb.plot.confusion_matrix(
-                probs=None, y_true=total_targets, preds=total_predictions, class_names=self.classes
-            )})
+            # wandb.log({"conf_mat": wandb.plot.confusion_matrix(
+            #     probs=None, y_true=total_targets, preds=total_predictions, class_names=self.classes
+            # )})
 
         if plot_scores:
             score_plot(precision_scores, recall_scores, f1_scores, self.classes, save=self.log_path)
@@ -210,7 +210,7 @@ class TrainSetup:
         # plot train-history with xman (uncomment if you have the xman libary installed)
         self.xmanager.plot_history(save=True)
 
-    def test(self, print_amount: int=None, plot_confusion_matrix: bool=True, plot_scores: bool=True, reinitialize: bool=True):
+    def test(self, print_amount: int=None, plot_confusion_matrix: bool=True, plot_scores: bool=True):
         model = Model(
             class_amount=self.total_classes,
             hidden_size=self.hidden_size,
@@ -304,6 +304,6 @@ class TrainSetup:
         )
         write_json(f"{self.output_path}/config.json", self.model_config)
 
-        shutil.copyfile(f"{self.log_path}/{self.model_name}.pt", f"{self.output_path}/model.pt")
+        shutil.copyfile(f"{self.log_path}/model.pt", f"{self.output_path}/model.pt")
         shutil.copyfile(f"{self.dataset_folder}/nationalities.json", f"{self.output_path}/nationalities.json")
 
