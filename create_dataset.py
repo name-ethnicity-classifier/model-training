@@ -63,10 +63,21 @@ def load_dataset() -> tuple[list, dict]:
     return raw_dataset, all_nationalities
 
 
+def validate_specified_classes(classes: list[str], existing_classes: list[str]):
+    if len(classes) <= 1:
+        raise ValueError(f"Specify at least two classes or one class plus 'else'!")
+
+    non_existent_classes = list(set(classes) - set(existing_classes + ["else"]))
+    if len(non_existent_classes) > 0:
+        raise ValueError(f"These classes do not exists: {', '.join(non_existent_classes)}")
+
+
 def preprocess_nationalities(dataset_name: str, nationalities: list):
     # Load raw dataset and nationality lists
     entire_dataset, nationality_data = load_dataset()
     all_nationalities = nationality_data["nationalities"]
+
+    validate_specified_classes(nationalities, all_nationalities)
 
     # Set minimum names per country
     minimum_per_country = 1
@@ -141,6 +152,8 @@ def preprocess_groups(dataset_name: str, groups: list):
     # Load raw dataset and nationality lists
     entire_dataset, nationality_data = load_dataset()
     all_nationalities, nationality_group_table = nationality_data["nationalities"], nationality_data["nationality_groups"]
+
+    validate_specified_classes(groups, list(nationality_group_table.keys()))
 
     # Create mapping for letters to indices
     abc_dict = {char: idx for idx, char in enumerate(string.ascii_lowercase + " -")}

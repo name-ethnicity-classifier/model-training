@@ -62,7 +62,7 @@ python ./create_dataset.py --name <choose dataset name> --classes german greek z
 # Create nationality group dataset
 python ./create_dataset.py --name <choose dataset name> --classes african eastAsian --is_group_level
 ```
-You need to choose your nationalities or groups from the ``./datasets/nationalities.json`` file.
+You need to choose your nationalities or groups from the ``./datasets/nationalities.json`` file. You can additionally specify the class ``else`` which will contain random names from all non-specified classes.
 
 When your dataset has been created there will be a new folder ``./datasets/preprocessed_datasetas/<dataset-name>/``.
 
