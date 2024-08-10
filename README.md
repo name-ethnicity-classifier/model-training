@@ -5,8 +5,6 @@ This repository contains the pipeline for training name-to-ethnicity models as w
 If you want to simply classify names use the [name-ethnicity-classifier](https://github.com/name-ethnicity-classifier/name-ethnicity-classifier) repository.
 
 > [!NOTE]
-> Work in progress!
->
 > This repository does not contain a dataset. The dataset we used for our research and to train models is private, but we may be able to share it upon request.
 > If you have your own dataset, you will find instructions below how to prepare it in order to use it with this repository.
 
