@@ -18,8 +18,8 @@ model_config = {
     "embedding-size": 200,              # dimension of the input embeddings
     "augmentation": 0.0,                # name part switching will slow down the training process when set high
     "resume": False,                    # set to True when resuming a cancelled training run and update the idx 0 of lr-schedule accordingly
-    "wandb-project": "wandb-project",   # name of the Weights&Biases project you want to track your experiments in (if you don't use it leave as is)
-    "wandb-entity": "wandb-username"    # name of the Weights&Biases username (if you don't use it leave as is)
+    "wandb-project": "n2e",             # name of the Weights&Biases project you want to track your experiments in (if you don't use it leave as is)
+    "wandb-entity": "theodorp"          # name of the Weights&Biases username (if you don't use it leave as is)
 }
 
 if __name__ == "__main__":

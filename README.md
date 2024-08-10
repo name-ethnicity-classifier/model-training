@@ -18,6 +18,7 @@ cd ./model-training/
 ```
 
 2. Install dependencies:
+Make sure you have Python >=3.9 installed and to create a venv/conda environment.
 ```
 pip install -r requirements.txt
 ```
@@ -30,10 +31,9 @@ Inside the [./datasets/](./datasets/) folder there is expected to be a file call
 1. Gather your names at a resource of your choice ([CompaniesHouse](https://www.gov.uk/government/organisations/companies-house), [Olympic Athletes](https://www.kaggle.com/datasets/heesoo37/120-years-of-olympic-history-athletes-and-results), etc.) and put them into a JSON file. Its structure should have nationality-names as keys which each have a list of names as a value, for example like this:
    ```json
    {
-       "german": ["max mustermann", "frederike maier", . . ., "Jospeh Söder"],
-       "american": ["joe smith", "Nancy Portman", . . ., "meryl moore"],
-       . . .,
-       "indian": ["Priya Srinivasan", "Hakam Ali Banerjee", . . ., "Prasun Khan"]
+       "german": ["max mustermann", "frederike maier", "Jospeh Söder"],
+       "american": ["joe smith", "Nancy Portman", "meryl moore"],
+       "indian": ["Priya Srinivasan", "Hakam Ali Banerjee", "Prasun Khan"]
    }
    ```
    Of course you should have many more nationalities and many more names per nationality. 
@@ -51,28 +51,32 @@ If you finally have a ``./datasets/raw_dataset.pickle`` file you are ready to tr
 ## 🦾 Training a model
 
 ### 1. Preprocess dataset
-First we need to create a preprocessed dataset from the ``./datasets/raw_dataset.pickle`` we added previously by choosing the exact nationalities (or groups) we want. For that use the ``./create_dataset.py`` file:
+First we need to create a preprocessed dataset from the ``./datasets/raw_dataset.pickle`` we added previously by choosing the exact nationalities (or groups) we want. 
+
+For that use ``./create_dataset.py``:
 
 ```bash
 # Create nationality dataset
-python ./create_dataset.py --name <choose name identifier> --classes german greek zimbabwean
+python ./create_dataset.py --name <choose dataset name> --classes german greek zimbabwean
 ```
 
 ```bash
 # Create nationality group dataset
-python ./create_dataset.py --name <choose name identifier> --classes african eastAsian --is_group_level
+python ./create_dataset.py --name <choose dataset name> --classes african eastAsian --is_group_level
 ```
+You need to choose your nationalities or groups from the ``./datasets/nationalities.json`` file.
 
-You need to choose nationalities or groups from the ``./datasets/nationalities.json`` file.
-When your dataset has been created there will be a new folder ``./datasets/preprocessed_datasetas/<dataset-name>/`` 
+When your dataset has been created there will be a new folder ``./datasets/preprocessed_datasetas/<dataset-name>/``.
 
 ### 2. Training model
-For training use and edit the ``./train_model.py`` file. use our dataset.
+For training use the ``./train_model.py`` file.
 
 To start the training simply run:
 ```bash
-python ./train_model.py
+python ./train_model.py --model_name <choose model name> --dataset_name <previously created dataset>
 ```
+
+You can change all hyperparameters by editing ``./train_model.py`` directly.
 
 > [!TIP]
 > If you don't see any improvement on the validation accuracy anymore simply you can simply interrupt the training (CTRL+C). Then to test/validate it comment out ``train_setup.train()`` and run your script again.
