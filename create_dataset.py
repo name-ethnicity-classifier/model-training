@@ -170,6 +170,8 @@ def preprocess_groups(dataset_name: str, groups: list):
 
     group_names = [[] for _ in range(len(groups))]
 
+    group_name_counts = {group: 0 for group in groups}
+
     for country, names in entire_dataset.items():
         group = handle_clusters(country, nationality_group_table)
         if group in groups or country in else_group:
@@ -184,15 +186,28 @@ def preprocess_groups(dataset_name: str, groups: list):
 
                     int_name = get_matrix_from_name(name, abc_dict)
                     group_names[class_].append([class_ + 1, int_name])
+                    group_name_counts[groups[class_]] += 1
                 except Exception:
                     continue
 
-    # Determine the maximum number of names per group
-    maximum_names = min(len(group) for group in group_names if group)
+    print("Number of names in each group before balancing:")
+    for group, count in group_name_counts.items():
+        print(f"{group}: {count}")
+    
+    import sys
+    sys.exit(0)
+
+    balance = False
+    maximum_names = max(len(group) for group in group_names if group)
+    if balance:
+        # Determine the maximum number of names per group
+        maximum_names = min(len(group) for group in group_names if group)
 
     dataset = []
     for group in group_names:
         random.shuffle(group)
+        if len(group) > 100000:
+            group = group[:500000]
         dataset += group[:maximum_names]
 
     random.shuffle(dataset)
@@ -236,6 +251,10 @@ if __name__ == "__main__":
     # dataset_name = "african_european_eastasian"
     # classes = ["african", "european", "eastAsian"]
     # group_level = True
+
+    dataset_name = "bootz_groups_unbalanced"
+    classes = ["african", "anglophone", "eastAsian", "eastEuropean", "french", "germanic", "greek", "hispanic", "islamic", "italian", "japanese", "korean", "nordic", "southAsian"]
+    group_level = True
 
     parser = argparse.ArgumentParser(description="Create a preprocessed dataset from the raw dataset by selecting nationalities or groups.")
     

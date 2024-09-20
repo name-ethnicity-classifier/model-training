@@ -3,8 +3,8 @@ from src.train_setup import TrainSetup
 
 
 model_config = {
-    "model-name": "my-model",           # give your model a descriptive name
-    "dataset-name": "my-dataset",       # name of dataset you want to use (must contain "dataset.pickle" and "nationalities.json")
+    "model-name": "bootz_model_unbalanced",           # give your model a descriptive name
+    "dataset-name": "bootz_groups_unbalanced",       # name of dataset you want to use (must contain "dataset.pickle" and "nationalities.json")
     "test-size": 0.1,                   # for test and validation set seperatly
     "optimizer": "Adam",                # changing it here doesn't make a difference, please change in train_setup.py directly
     "loss-function": "NLLLoss",         # changing it here doesn't make a difference, please change in train_setup.py directly
@@ -18,8 +18,8 @@ model_config = {
     "embedding-size": 200,              # dimension of the input embeddings
     "augmentation": 0.0,                # name part switching will slow down the training process when set high
     "resume": False,                    # set to True when resuming a cancelled training run and update the idx 0 of lr-schedule accordingly
-    "wandb-project": "wandb-project",   # name of the Weights&Biases project you want to track your experiments in (if you don't use it leave as is)
-    "wandb-entity": "wandb-username"    # name of the Weights&Biases username (if you don't use it leave as is)
+    "wandb-project": "n2e",   # name of the Weights&Biases project you want to track your experiments in (if you don't use it leave as is)
+    "wandb-entity": "theodorp"    # name of the Weights&Biases username (if you don't use it leave as is)
 }
 
 if __name__ == "__main__":
@@ -37,5 +37,5 @@ if __name__ == "__main__":
 
     # Train and test
     train_setup = TrainSetup(model_config)
-    train_setup.train()
+    # train_setup.train()
     train_setup.test(print_amount=None, plot_confusion_matrix=True, plot_scores=False)

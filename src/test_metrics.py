@@ -164,7 +164,7 @@ def f1_score(precisions: list, recalls: list) -> list:
         try:
             f1_score = round((2 * ((precision_score * recall_score) / (precision_score + recall_score))), 5)
         except:
-            f1_score = "n/a"
+            f1_score = 0
 
         f1_scores.append(f1_score)
 

@@ -102,6 +102,7 @@ def show_progress(
         train_accuracy: float,
         val_loss: float,
         val_accuracy: float,
+        f1_score: float=None,
         color: bool=False
     ):
     """ print training stats
@@ -125,8 +126,13 @@ def show_progress(
         val_accuracy = str(round(val_accuracy, 4)) + "%"
         val_loss = str(round(val_loss, 6))
 
+    
+    if f1_score:
+        print("epoch {} train_loss: {} - val_loss: {} - f1_score: {}".format(epochs, train_loss, val_loss, f1_score), "\n")
+        return
+        
     print("epoch {} train_loss: {} - train_acc: {} - val_loss: {} - val_acc: {}".format(epochs, train_loss, train_accuracy, val_loss, val_accuracy), "\n")
-
+    
 
 def lr_scheduler(optimizer: torch.optim, current_iteration: int=0, warmup_iterations: int=0, lr_end: float=0.001, decay_rate: float=0.99, decay_intervall: int=100) -> None:
     current_iteration += 1

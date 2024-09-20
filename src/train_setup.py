@@ -86,22 +86,22 @@ class TrainSetup:
         losses = []
         total_targets, total_predictions = [], []
 
-        for names, targets, _ in tqdm(validation_dataset, desc="validating", ncols=100):
-            names = names.to(device=device)
-            targets = targets.to(device=device)
+        with torch.no_grad():
+            model.eval()
+            for names, targets, _ in tqdm(validation_dataset, desc="validating", ncols=100):
+                names = names.to(device=device)
+                targets = targets.to(device=device)
 
-            predictions = model.eval()(names)
-            loss = criterion(predictions, targets.squeeze())
-            losses.append(loss.item())
+                predictions = model(names)
+                loss = criterion(predictions, targets.squeeze())
+                losses.append(loss.item())
 
-            for i in range(predictions.size()[0]):
-                target_index = targets[i].cpu().detach().numpy()[0]
+                for i in range(predictions.size()[0]):
+                    target_index = targets[i].item()
+                    prediction_index = predictions[i].argmax().item()
 
-                prediction = predictions[i].cpu().detach().numpy()
-                prediction_index = list(prediction).index(max(prediction))
-
-                total_targets.append(target_index)
-                total_predictions.append(prediction_index)
+                    total_targets.append(target_index)
+                    total_predictions.append(prediction_index)
 
         # calculate loss
         loss = np.mean(losses)
@@ -160,6 +160,7 @@ class TrainSetup:
 
             total_train_targets, total_train_predictions = [], []
             epoch_train_loss = []
+
             for names, targets, _ in tqdm(self.train_set, desc="epoch", ncols=100):
                 optimizer.zero_grad()
 
@@ -179,7 +180,7 @@ class TrainSetup:
                 # log targets and prediction of every iteration to compute the train accuracy later
                 validated_predictions = model.eval()(names)
                 for i in range(validated_predictions.size()[0]): 
-                    total_train_targets.append(targets[i].cpu().detach().numpy()[0])
+                    total_train_targets.append(targets[i].item())
                     validated_prediction = validated_predictions[i].cpu().detach().numpy()
                     total_train_predictions.append(list(validated_prediction).index(max(validated_prediction)))
                 
@@ -198,7 +199,7 @@ class TrainSetup:
             epoch_val_loss, epoch_val_accuracy, scores = self._validate(model, self.validation_set)
 
             # print training stats in pretty format
-            show_progress(self.epochs, epoch, epoch_train_loss, epoch_train_accuracy, epoch_val_loss, epoch_val_accuracy)
+            show_progress(self.epochs, epoch, epoch_train_loss, epoch_train_accuracy, epoch_val_loss, epoch_val_accuracy, f1_score=np.mean(scores[-1]))
             print("\nlr: ", optimizer.param_groups[0]["lr"], "\n")
 
             # log with wandb
